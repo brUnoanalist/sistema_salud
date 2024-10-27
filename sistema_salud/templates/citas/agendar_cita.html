@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Agendar Cita</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_fecha">Fecha:</label>
+            {{ form.fecha }}  <!-- Campo de fecha con selector de calendario -->
+        </div>
+        <div class="form-group">
+            <label for="id_profesional">Profesional de la Salud:</label>
+            {{ form.profesional }}  <!-- Campo de selección de profesional -->
+        </div>
+        <div class="form-group">
+            <label for="id_hora_inicio">Hora de Inicio:</label>
+            {{ form.hora_inicio }}  <!-- Select para las horas disponibles -->
+            {% if form.hora_inicio.errors %}
+            <div class="text-danger">
+                {{ form.hora_inicio.errors.0 }}
+            </div>
+        {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="id_descripcion">Descripción:</label>
+            {{ form.descripcion }}
+        </div>
+        <button type="submit" class="btn btn-primary">Agendar Cita</button>
+    </form>
+</div>
+{% endblock %}

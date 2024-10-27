@@ -1,0 +1,54 @@
+<!-- citas/templates/citas/lista_citas_paciente.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Mis Citas</h2>
+    <a href="{% url 'citas:agendar_cita' %}" class="btn btn-primary mb-3">Agendar Nueva Cita</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Profesional de la Salud</th>
+                <th>Fecha</th>
+                <th>Hora de Inicio</th>
+                <th>Estado</th>
+                <th>Notas</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cita in citas %}
+            <tr>
+                <td>{{ cita.profesional.username }}</td>
+                <td>{{ cita.fecha }}</td>
+                <td>{{ cita.hora_inicio }}</td>
+                <td>
+                    {% if cita.estado_cita == 'confirmada' %}
+                        <span class="badge badge-success">Confirmada</span>
+                    {% elif cita.estado_cita == 'cancelada_paciente' %}
+                        <span class="badge badge-danger">Cancelada por el Paciente</span>
+                    {% elif cita.estado_cita == 'cancelada_profesional' %}
+                        <span class="badge badge-danger">Cancelada por el Profesional</span>
+                    {% else %}
+                        <span class="badge badge-warning">Pendiente</span>
+                    {% endif %}
+                </td>
+                <td>{{ cita.notas|default:"Ninguna" }}</td>
+                <td>
+                    {% if cita.estado_cita == 'pendiente' %}
+                        <!-- Solo mostrar el botón de cancelar para el paciente -->
+                        <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada' %}" class="btn btn-danger btn-sm">Cancelar</a>
+                    {% elif cita.estado_cita == 'confirmada' %}
+                        <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada' %}" class="btn btn-danger btn-sm">Cancelar</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No tienes citas agendadas</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

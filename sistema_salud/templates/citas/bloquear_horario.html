@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="card-title text-center mb-4">Bloquear Horario</h2>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                <label for="id_fecha" class="form-label">Fecha:</label>
+                {{ form.fecha }}
+            </div>
+            <div class="form-group mb-3">
+                <label for="id_hora_inicio" class="form-label">Hora:</label>
+                {{ form.hora_inicio }}
+            </div>
+            <div class="form-group mb-3 form-check">
+                {{ form.es_bloqueado }}
+                <label for="id_es_bloqueado" class="form-check-label">Bloquear este horario</label>
+            </div>
+            <button type="submit" class="btn btn-danger w-100 mt-4">Bloquear Horario</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

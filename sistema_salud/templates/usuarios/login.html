@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Iniciar Sesión</h2>
+            <form method="post" class="form-horizontal">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Nombre de Usuario:</label>
+                    <input type="text" name="username" class="form-control" id="id_username" placeholder="Nombre de Usuario">
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Contraseña:</label>
+                    <input type="password" name="password" class="form-control" id="id_password" placeholder="Contraseña">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+            </form>
+             <!-- Enlace de recuperación de contraseña -->
+             <div class="text-center mt-3">
+                <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+            </div>
+            {% if form.errors %}
+                <div class="alert alert-danger mt-3">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% for message in messages %}
+                <div class="alert alert-info mt-3">{{ message }}</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+<!-- usuarios/templates/usuarios/base.html -->
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- Si tienes un archivo CSS personalizado -->
+    <title> Salud Facil</title>
+</head>
+<body class="d-flex flex-column min-vh-100 ">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">Sistema Salud</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link">Bienvenido, {{ user.full_name }}</span>
+                        </li>
+                        {% if user.user_type == 'paciente' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'citas:lista_citas_paciente' %}">Mis Citas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'citas:agendar_cita' %}">Agendar Cita</a>
+                            </li>
+                        {% elif user.user_type == 'profesional' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'citas:lista_citas_profesional' %}">Citas Asignadas</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'usuarios:logout' %}">Cerrar Sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar Sesión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Registrarse</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+
+    <div class="container flex-fill">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer class="bg-light text-center py-3 mt-auto">
+        <p>&copy; 2024 Tu Proyecto de Salud. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

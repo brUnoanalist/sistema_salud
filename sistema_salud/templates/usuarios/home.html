@@ -1,65 +1,62 @@
-<!-- usuarios/templates/usuarios/home.html -->
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center align-items-center">
-         <!-- Si el usuario está autenticado -->
-         {% if user.is_authenticated %}
-         <div class="col-md-7 text-center">
-             <h1 class="mb-4">Bienvenido, {{ user.full_name }}!</h1>
-             <p>Gracias por ser parte de nuestra plataforma. ¡Estamos encantados de que estés aquí!</p>
-             <img src="{% static 'images/banner-home.jpg' %}" alt="Imagen de Salud" class="img-fluid rounded shadow">
-             <p class="mt-3">Explora las diferentes funcionalidades que tenemos disponibles para ti.</p>
-         </div>
-     {% else %}
-     <!-- Si el usuario no está autenticado -->
-        <!-- Sección de bienvenida -->
-        <div class="col-md-7 text-center">
-            <h1 class="mb-4">Bienvenido al Sistema de Salud</h1>
-            <p>Encuentra profesionales de la salud y gestiona tus citas fácilmente.</p>
-            <img src="{% static 'images/banner-home.jpg' %}" alt="Imagen de Salud" class="img-fluid rounded shadow">
+<div class="container mx-auto mt-5">
+    <div class="flex flex-col md:flex-row justify-center items-start">
+        <!-- Sección de la imagen -->
+        <div class="w-full md:w-1/2 mb-5 md:mb-0 flex justify-center">
+            <img src="{% static 'images/banner-home.jpg' %}" alt="Imagen de Salud" class="rounded-lg shadow-lg">
         </div>
 
-        <!-- Sección del formulario de registro -->
-        <div class="col-md-5">
-            <div class="card p-4 ">
-                <h2 class="card-title text-center mb-3">Registro de Usuario</h2>
+        <!-- Sección del formulario -->
+        <div class="w-full md:w-1/2 md:ml-6">
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <!-- Si el usuario está autenticado -->
+                {% if user.is_authenticated %}
+                <h1 class="text-3xl font-bold mb-4 italic">Bienvenido, {{ user.full_name }}!</h1>
+                <p class="mb-3 italic font-bold">Gracias por ser parte de nuestra plataforma. ¡Estamos encantados de que estés aquí!</p>
+                <p class="mt-3 italic font-bold">Explora las diferentes funcionalidades que tenemos disponibles para ti.</p>
+                <img src="{% static 'images/banner-user.jpg' %}" alt="Imagen de Salud" class="rounded-lg shadow-lg mt-4">
+                {% else %}
+                <!-- Si el usuario no está autenticado -->
+                <h1 class="text-3xl font-bold mb-4 italic">Bienvenido al Sistema de Salud</h1>
+                <p class="mb-3 italic">Encuentra profesionales de la salud y gestiona tus citas fácilmente.</p>
+
+                <!-- Sección del formulario de registro -->
+                <h2 class="text-2xl font-semibold text-center italic mb-3">Registro de Usuario</h2>
 
                 <!-- Formulario -->
-                <form method="post">
+                <form method="post" class="space-y-4">
                     {% csrf_token %}
-
                     <!-- Campo de nombre de usuario -->
-                    <div class="form-group mb-3">
-                        <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-                        <input type="text" class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" value="{{ form.username.value|default_if_none:'' }}">
+                    <div>
+                        <label for="{{ form.username.id_for_label }}" class="block text-gray-700 italic">Nombre de Usuario</label>
+                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" value="{{ form.username.value|default_if_none:'' }}" required>
                     </div>
 
                     <!-- Campo de correo electrónico -->
-                    <div class="form-group mb-3">
-                        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-                        <input type="email" class="form-control" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" value="{{ form.email.value|default_if_none:'' }}">
+                    <div>
+                        <label for="{{ form.email.id_for_label }}" class="block text-gray-700 italic">Email</label>
+                        <input type="email" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" value="{{ form.email.value|default_if_none:'' }}" required>
                     </div>
 
                     <!-- Campo de nombre completo -->
-                    <div class="form-group mb-3">
-                        <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
-                        <input type="text" class="form-control" id="{{ form.full_name.id_for_label }}" name="{{ form.full_name.html_name }}" value="{{ form.full_name.value|default_if_none:'' }}">
+                    <div>
+                        <label for="{{ form.full_name.id_for_label }}" class="block text-gray-700 italic">Nombre Completo</label>
+                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.full_name.id_for_label }}" name="{{ form.full_name.html_name }}" value="{{ form.full_name.value|default_if_none:'' }}" required>
                     </div>
 
                     <!-- Campo de teléfono -->
-                    <div class="form-group mb-3">
-                        <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
-                        <input type="text" class="form-control" id="{{ form.phone.id_for_label }}" name="{{ form.phone.html_name }}" value="{{ form.phone.value|default_if_none:'' }}">
+                    <div>
+                        <label for="{{ form.phone.id_for_label }}" class="block text-gray-700 italic">Número de Teléfono</label>
+                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.phone.id_for_label }}" name="{{ form.phone.html_name }}" value="{{ form.phone.value|default_if_none:'' }}" required>
                     </div>
 
                     <!-- Campo de tipo de usuario -->
-                    <div class="form-group mb-3">
-                        <label for="{{ form.user_type.id_for_label }}">{{ form.user_type.label }}</label>
-                        <select class="form-control" id="{{ form.user_type.id_for_label }}" name="{{ form.user_type.html_name }}">
+                    <div>
+                        <label for="{{ form.user_type.id_for_label }}" class="block text-gray-700 italic">Tipo de Usuario</label>
+                        <select class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.user_type.id_for_label }}" name="{{ form.user_type.html_name }}" required>
                             {% for option in form.user_type.field.choices %}
                                 <option value="{{ option.0 }}" {% if form.user_type.value == option.0 %}selected{% endif %}>{{ option.1 }}</option>
                             {% endfor %}
@@ -67,34 +64,33 @@
                     </div>
 
                     <!-- Campo de contraseña -->
-                    <div class="form-group mb-3">
-                        <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
-                        <input type="password" class="form-control" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}">
+                    <div>
+                        <label for="{{ form.password1.id_for_label }}" class="block text-gray-700 italic">Contraseña</label>
+                        <input type="password" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" required>
                     </div>
 
                     <!-- Campo de confirmación de contraseña -->
-                    <div class="form-group mb-3">
-                        <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
-                        <input type="password" class="form-control" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}">
+                    <div>
+                        <label for="{{ form.password2.id_for_label }}" class="block text-gray-700 italic">Confirmar Contraseña</label>
+                        <input type="password" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" required>
                     </div>
 
                     <!-- Botón de envío -->
-                    <button type="submit" class="btn btn-primary w-100">Registrar</button>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition">Registrar</button>
                 </form>
-                 <!-- Redirección al login -->
-                 <div class="mt-3 text-center">
-                    <p>¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}" class="text-decoration-none">Inicia sesión aquí</a>.</p>
+                
+                <!-- Redirección al login -->
+                <div class="mt-3 text-center">
+                    <p class="italic">¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}" class="text-blue-600 hover:underline italic">Inicia sesión aquí</a>.</p>
                 </div>
 
                 <!-- Mostrar mensajes de éxito o error -->
                 {% for message in messages %}
-                    <div class="alert alert-info mt-3">{{ message }}</div>
+                    <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 rounded mt-3 italic">{{ message }}</div>
                 {% endfor %}
+                {% endif %}
             </div>
         </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}
-
-

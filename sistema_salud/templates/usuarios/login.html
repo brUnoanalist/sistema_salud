@@ -1,28 +1,35 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Iniciar Sesión{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2 class="text-center">Iniciar Sesión</h2>
-            <form method="post" class="form-horizontal">
+<div class="container mx-auto mt-5">
+    <div class="flex flex-col md:flex-row justify-center items-start">
+        <!-- Sección de la imagen -->
+        <div class="w-full md:w-1/2 mb-5 md:mb-0 flex justify-center ">
+            <img src="{% static 'images/login-banner1.jpg' %}" alt="Imagen de Inicio de Sesión" class="img-fluid rounded shadow-lg">
+        </div>
+
+        <!-- Sección del formulario -->
+        <div class="w-full md:w-1/2 md:ml-6">
+            <h2 class="text-center text-2xl font-bold mb-4 italic font-bold">Iniciar Sesión</h2>
+            <form method="post" class="bg-white shadow-md rounded-lg p-6">
                 {% csrf_token %}
-                <div class="form-group">
-                    <label for="id_username">Nombre de Usuario:</label>
-                    <input type="text" name="username" class="form-control" id="id_username" placeholder="Nombre de Usuario">
+                <div class="mb-4">
+                    <label for="id_username" class="block text-gray-700 italic font-bold">Nombre de Usuario:</label>
+                    <input type="text" name="username" class="form-control mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="id_username" placeholder="Nombre de Usuario" required>
                 </div>
-                <div class="form-group">
-                    <label for="id_password">Contraseña:</label>
-                    <input type="password" name="password" class="form-control" id="id_password" placeholder="Contraseña">
+                <div class="mb-4">
+                    <label for="id_password" class="block text-gray-700 italic font-bold">Contraseña:</label>
+                    <input type="password" name="password" class="form-control mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="id_password" placeholder="Contraseña" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition italic">Iniciar Sesión</button>
             </form>
              <!-- Enlace de recuperación de contraseña -->
              <div class="text-center mt-3">
-                <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                <a href="#" class="text-blue-600 hover:underline italic">¿Olvidaste tu contraseña?</a>
             </div>
+
             {% if form.errors %}
                 <div class="alert alert-danger mt-3">
                     {% for field in form %}
@@ -33,7 +40,7 @@
                 </div>
             {% endif %}
             {% for message in messages %}
-                <div class="alert alert-info mt-3">{{ message }}</div>
+                <div class="alert alert-info mt-3 italic">{{ message }}</div>
             {% endfor %}
         </div>
     </div>

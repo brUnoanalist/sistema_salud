@@ -1,41 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h1 class="text-center">Editar Perfil</h1>
-            <form method="post" class="mt-4">
+<div class="container mx-auto mt-10">
+    <div class="flex justify-center">
+        <div class="w-full md:w-1/2">
+            <h1 class="text-center text-2xl font-bold mb-6 italic">Editar Perfil</h1>
+            <form method="post" class="bg-white p-6 shadow-md rounded-lg">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="username" class="form-label">Nombre de Usuario</label>
-                    <input type="text" name="username" id="username" value="{{ user.username }}" class="form-control" readonly>
-                    <small class="form-text text-muted">No puedes cambiar tu nombre de usuario.</small>
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-700 font-semibold italic">Nombre de Usuario</label>
+                    <input type="text" name="username" id="username" value="{{ user.username }}" class="mt-1 block w-full border rounded-lg py-2 px-3 bg-gray-100" readonly>
+                    <small class="text-gray-600">No puedes cambiar tu nombre de usuario.</small>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Correo Electrónico</label>
-                    <input type="email" name="email" id="email" value="{{ user.email }}" class="form-control" required>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 font-semibold italic">Correo Electrónico</label>
+                    <input type="email" name="email" id="email" value="{{ user.email }}" class="mt-1 block w-full border rounded-lg py-2 px-3" required>
                 </div>
-                <div class="mb-3">
-                    <label for="full_name" class="form-label">Nombre Completo</label>
-                    <input type="text" name="full_name" id="full_name" value="{{ user.full_name }}" class="form-control" required>
+                <div class="mb-4">
+                    <label for="full_name" class="block text-gray-700 font-semibold italic">Nombre Completo</label>
+                    <input type="text" name="full_name" id="full_name" value="{{ user.full_name }}" class="mt-1 block w-full border rounded-lg py-2 px-3" required>
                 </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Teléfono</label>
-                    <input type="text" name="phone" id="phone" value="{{ user.phone }}" class="form-control" required>
+                <div class="mb-4">
+                    <label for="phone" class="block text-gray-700 font-semibold italic">Teléfono</label>
+                    <input type="text" name="phone" id="phone" value="{{ user.phone }}" class="mt-1 block w-full border rounded-lg py-2 px-3" required>
                 </div>
-                <div class="mb-3">
-                    <label for="user_type" class="form-label">Tipo de Usuario</label>
+                <div class="mb-4">
+                    <label for="user_type" class="block text-gray-700 font-semibold italic">Tipo de Usuario</label>
                     <input type="hidden" name="user_type" id="user_type" value="{{ user.user_type }}">
-                    <input type="text" class="form-control" value="{{ user.get_user_type_display }}" readonly>
+                    <input type="text" class="mt-1 block w-full border rounded-lg py-2 px-3 bg-gray-100" value="{{ user.get_user_type_display }}" readonly>
                 </div>
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+                <div class="flex justify-center mt-6">
+                    <button type="submit" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition italic">Actualizar Perfil</button>
                 </div>
             </form>
-            {% for message in messages %}
-                <div class="alert alert-info mt-3 text-center">{{ message }}</div>
-            {% endfor %}
+            
         </div>
     </div>
 </div>

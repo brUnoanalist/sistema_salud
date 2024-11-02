@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container mx-auto mt-5">
-    <div class="flex flex-col md:flex-row justify-center items-start">
+    <div class="flex flex-col md:flex-row justify-center items-start bg-blue-100 p-6 rounded-lg shadow-md">
         <!-- Sección de la imagen -->
         <div class="w-full md:w-1/2 mb-5 md:mb-0 flex justify-center">
             <img src="{% static 'images/banner-home.jpg' %}" alt="Imagen de Salud" class="rounded-lg shadow-lg">
@@ -11,15 +11,14 @@
 
         <!-- Sección del formulario -->
         <div class="w-full md:w-1/2 md:ml-6">
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <!-- Si el usuario está autenticado -->
+            <div class="bg-white rounded-lg p-6 shadow-lg">
                 {% if user.is_authenticated %}
                 <h1 class="text-3xl font-bold mb-4 italic">Bienvenido, {{ user.full_name }}!</h1>
                 <p class="mb-3 italic font-bold">Gracias por ser parte de nuestra plataforma. ¡Estamos encantados de que estés aquí!</p>
                 <p class="mt-3 italic font-bold">Explora las diferentes funcionalidades que tenemos disponibles para ti.</p>
+                <a href="{% url 'usuarios:buscar_profesionales' %}" class="inline-block mt-3 bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600 transition">Buscar Profesionales de la Salud</a>
                 <img src="{% static 'images/banner-user.jpg' %}" alt="Imagen de Salud" class="rounded-lg shadow-lg mt-4">
                 {% else %}
-                <!-- Si el usuario no está autenticado -->
                 <h1 class="text-3xl font-bold mb-4 italic">Bienvenido al Sistema de Salud</h1>
                 <p class="mb-3 italic">Encuentra profesionales de la salud y gestiona tus citas fácilmente.</p>
 
@@ -29,31 +28,26 @@
                 <!-- Formulario -->
                 <form method="post" class="space-y-4">
                     {% csrf_token %}
-                    <!-- Campo de nombre de usuario -->
                     <div>
                         <label for="{{ form.username.id_for_label }}" class="block text-gray-700 italic">Nombre de Usuario</label>
                         <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" value="{{ form.username.value|default_if_none:'' }}" required>
                     </div>
 
-                    <!-- Campo de correo electrónico -->
                     <div>
                         <label for="{{ form.email.id_for_label }}" class="block text-gray-700 italic">Email</label>
                         <input type="email" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" value="{{ form.email.value|default_if_none:'' }}" required>
                     </div>
 
-                    <!-- Campo de nombre completo -->
                     <div>
                         <label for="{{ form.full_name.id_for_label }}" class="block text-gray-700 italic">Nombre Completo</label>
                         <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.full_name.id_for_label }}" name="{{ form.full_name.html_name }}" value="{{ form.full_name.value|default_if_none:'' }}" required>
                     </div>
 
-                    <!-- Campo de teléfono -->
                     <div>
                         <label for="{{ form.phone.id_for_label }}" class="block text-gray-700 italic">Número de Teléfono</label>
                         <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.phone.id_for_label }}" name="{{ form.phone.html_name }}" value="{{ form.phone.value|default_if_none:'' }}" required>
                     </div>
 
-                    <!-- Campo de tipo de usuario -->
                     <div>
                         <label for="{{ form.user_type.id_for_label }}" class="block text-gray-700 italic">Tipo de Usuario</label>
                         <select class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.user_type.id_for_label }}" name="{{ form.user_type.html_name }}" required>
@@ -63,25 +57,21 @@
                         </select>
                     </div>
 
-                    <!-- Campo de contraseña -->
                     <div>
                         <label for="{{ form.password1.id_for_label }}" class="block text-gray-700 italic">Contraseña</label>
                         <input type="password" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" required>
                     </div>
 
-                    <!-- Campo de confirmación de contraseña -->
                     <div>
-                        <label for="{{ form.password2.id_for_label }}" class="block text-gray-700 italic">Confirmar Contraseña</label>
+                        <label for="{{ form.password2.id_for_label }}" class="block text-gray-500 italic">Confirmar Contraseña</label>
                         <input type="password" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" required>
                     </div>
 
-                    <!-- Botón de envío -->
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition">Registrar</button>
+                    <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition">Registrar</button>
                 </form>
                 
-                <!-- Redirección al login -->
                 <div class="mt-3 text-center">
-                    <p class="italic">¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}" class="text-blue-600 hover:underline italic">Inicia sesión aquí</a>.</p>
+                    <p class="italic">¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}" class="text-blue-500 hover:underline italic">Inicia sesión aquí</a>.</p>
                 </div>
 
                 <!-- Mostrar mensajes de éxito o error -->
@@ -92,5 +82,53 @@
             </div>
         </div>
     </div>
+
+    <!-- Carrusel simple de imágenes -->
+   <!-- Carrusel simple de imágenes -->
+   <div class="mt-8">
+    <h2 class="text-2xl font-bold text-center mb-4">Nuestros Servicios</h2>
+    <div class="relative container mx-auto mt-5">
+        <div class="overflow-hidden rounded-lg w-full">
+            <div id="carousel-inner" class="carousel-inner flex w-[200%] transition-transform duration-300 ease-in-out mx-auto">
+                <!-- Slide 1 -->
+                <div class="carousel-item flex w-full flex-shrink-0 space-x-4 justify-center">
+                    <img src="{% static 'images/home/kine.jpg' %}" alt="Servicio 1" class="w-64 h-64 rounded-lg shadow-lg object-cover">
+                    <img src="{% static 'images/home/dentista.jpg' %}" alt="Servicio 2" class="w-64 h-64 rounded-lg shadow-lg object-cover">
+                    <img src="{% static 'images/home/toma_muestras.jpg' %}" alt="Servicio 3" class="w-64 h-64 rounded-lg shadow-lg object-cover">
+                </div>
+                <!-- Slide 2 -->
+                <div class="carousel-item flex w-full flex-shrink-0 space-x-4 justify-center">
+                    <img src="{% static 'images/home/doctor.jpg' %}" alt="Servicio 4" class="w-64 h-64 rounded-lg shadow-lg object-cover">
+                    <img src="{% static 'images/service5.jpg' %}" alt="Servicio 5" class="w-64 h-64 rounded-lg shadow-lg object-cover">
+                    <img src="{% static 'images/service6.jpg' %}" alt="Servicio 6" class="w-64 h-64 rounded-lg shadow-lg object-cover">
+                </div> 
+            </div>
+        </div>
+
+        <!-- Botones de navegación -->
+        <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition" onclick="prevSlide()">&#10094;</button>
+        <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition" onclick="nextSlide()">&#10095;</button>
+    </div>
 </div>
+
+<script>
+    let currentIndex = 0;
+    const slides = document.querySelectorAll('.carousel-item');
+    const totalSlides = slides.length;
+
+    function updateSlidePosition() {
+        document.getElementById('carousel-inner').style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlidePosition();
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlidePosition();
+    }
+</script>
+
 {% endblock %}

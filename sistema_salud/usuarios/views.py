@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import (CustomUserCreationForm ,CustomUserEditForm ,CustomAuthenticationForm)
+from .models import CustomUser
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
@@ -68,7 +69,7 @@ def perfil_usuario(request):
 def editar_perfil(request):
     user = request.user
     if request.method == 'POST':
-        form = CustomUserEditForm(request.POST, instance=user)
+        form = CustomUserEditForm(request.POST,request.FILES, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Tu perfil ha sido actualizado con éxito.')
@@ -77,3 +78,14 @@ def editar_perfil(request):
         form = CustomUserEditForm(instance=user)
 
     return render(request, 'usuarios/editar_perfil.html', {'form': form})
+
+
+
+def buscar_profesionales(request):
+    query = request.GET.get('q')
+    if query:
+        profesionales = CustomUser.objects.filter(user_type='profesional', specialties__icontains=query)
+    else:
+        profesionales = CustomUser.objects.filter(user_type='profesional')
+
+    return render(request, 'usuarios/buscar_profesionales.html', {'profesionales': profesionales})

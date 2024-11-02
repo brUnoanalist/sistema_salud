@@ -12,12 +12,13 @@
 <body class="flex flex-col min-h-screen bg-gray-50">
 
     <!-- Navbar -->
-    <nav class="bg-blue-900 text-white p-4 shadow">
+    <nav class="bg-blue-500 text-white p-4 ">
         <div class="container mx-auto flex justify-between items-center">
             <a class="text-2xl font-bold italic" href="{% url 'home' %}">Sistema Salud</a>
+        
             <div class="flex space-x-4">
                 {% if user.is_authenticated %}
-                    <span class="text-lg font-bold italic">Bienvenido, {{ user.full_name }}</span>
+                    <a class="text-lg font-bold italic" href="{% url 'usuarios:perfil' %}">Bienvenido, {{ user.full_name }}</a>
                     {% if user.user_type == 'paciente' %}
                         <a href="{% url 'citas:lista_citas_paciente' %}" class="bg-white text-blue-900 rounded-lg py-2 px-4 transition hover:bg-blue-100 italic">Mis Citas</a>
                         <a href="{% url 'citas:agendar_cita' %}" class="bg-white text-blue-900 rounded-lg py-2 px-4 transition hover:bg-blue-100 italic">Agendar Cita</a>
@@ -38,7 +39,7 @@
         {% endblock %}
     </div>
 
-    <footer class="bg-blue-900 text-white text-center py-3 mt-auto">
+    <footer class="bg-blue-500 text-white text-center py-3 mt-auto">
         <p>&copy; 2024 Tu Proyecto de Salud. Todos los derechos reservados.</p>
     </footer>
 

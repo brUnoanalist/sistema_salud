@@ -3,12 +3,12 @@
 
 {% block content %}
 <div class="container mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-4xl font-bold text-blue-600 mb-6">
+    <h2 class="text-4xl font-bold text-blue-500 mb-6">
         Mis Citas
     </h2>
 
     <div class="mb-6">
-        <a href="{% url 'citas:agendar_cita' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+        <a href="{% url 'citas:agendar_cita' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
             <i class="fas fa-calendar-plus mr-2"></i> Agendar Nueva Cita
         </a>
     </div>
@@ -18,10 +18,11 @@
             <thead>
                 <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
                     <th class="py-3 px-6 text-left">Profesional de la Salud</th>
+                    <th class="py-3 px-6 text-left">Especialidad</th>
                     <th class="py-3 px-6 text-left">Fecha</th>
                     <th class="py-3 px-6 text-left">Hora de Inicio</th>
+                    <th class="py-3 px-6 text-left">Sintoma</th>
                     <th class="py-3 px-6 text-left">Estado</th>
-                    <th class="py-3 px-6 text-left">Notas</th>
                     <th class="py-3 px-6 text-center">Acciones</th>
                 </tr>
             </thead>
@@ -29,12 +30,17 @@
                 {% for cita in citas %}
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
                         <td class="py-2 px-4 border-b"><span class="inline-block bg-green-500 text-white rounded-full px-3 py-1">{{ cita.profesional.full_name }}</span></td>
+                        <td class="py-2 px-4 border-b"><span class="inline-block bg-blue-500 text-white rounded-full px-3 py-1">{{ cita.profesional.specialties }}</span></td>
                         <td class="py-3 px-6 text-left">
-                            <span class="text-blue-500 font-semibold">{{ cita.fecha|date:"d M Y" }}</span>
+                            <span class="text-blue-800 font-semibold">{{ cita.fecha|date:"d M Y" }}</span>
                         </td>
                         <td class="py-3 px-6 text-left">
-                            <span class="text-blue-500 font-semibold">{{ cita.hora_inicio }}</span>
+                            <span class="text-blue-800 font-semibold">{{ cita.hora_inicio }}</span>
                         </td>
+                        <td class="py-3 px-6 text-left">
+                            <span class="text-blue-800 font-semibold">{{ cita.descripcion }}</span>
+                        </td>
+                        
                         <td class="py-3 px-6 text-left">
                             {% if cita.estado_cita == 'confirmada' %}
                             <span class="inline-block bg-green-200 text-green-800 rounded-full px-3 py-1">Confirmada</span>
@@ -46,7 +52,7 @@
                             <span class="inline-block bg-yellow-200 text-yellow-800 rounded-full px-3 py-1">Pendiente</span>
                         {% endif %}
                         </td>
-                        <td class="py-3 px-6 text-left">{{ cita.notas|default:"Ninguna" }}</td>
+                        
                         <td class="py-3 px-6 text-center">
                             {% if cita.estado_cita == 'pendiente' %}
                                 <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
@@ -54,7 +60,9 @@
                                 <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
                             {% endif %}
                         </td>
+                        
                     </tr>
+                    
                 {% empty %}
                     <tr>
                         <td colspan="6" class="py-4 text-center text-gray-500">No tienes citas asignadas</td>

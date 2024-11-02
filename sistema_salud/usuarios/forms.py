@@ -37,6 +37,6 @@ class CustomUserEditForm(forms.ModelForm):
     
     class Meta:
         model = CustomUser
-        fields = ('full_name', 'email', 'phone', 'user_type')  # Añade o quita campos según sea necesario
+        fields = ('full_name', 'email', 'phone', 'user_type', 'profile_picture', 'bio','specialties')  # Añade o quita campos según sea necesario
 
     user_type = forms.ChoiceField(choices=CustomUser.USER_TYPE_CHOICES, required=True)

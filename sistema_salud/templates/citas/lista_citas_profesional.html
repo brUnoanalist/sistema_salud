@@ -15,42 +15,46 @@
                     <th class="py-3 px-6 text-left">Paciente</th>
                     <th class="py-3 px-6 text-left">Fecha</th>
                     <th class="py-3 px-6 text-left">Hora de Inicio</th>
+                    <th class="py-3 px-6 text-left">Sintomas</th>
                     <th class="py-3 px-6 text-left">Estado</th>
-                    <th class="py-3 px-6 text-left">Notas</th>
                     <th class="py-3 px-6 text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody class="text-gray-600 text-sm font-light">
                 {% for cita in citas %}
-                    <tr class="border-b border-gray-200 hover:bg-gray-100">
-                        <td class="py-2 px-4 border-b"><span class="inline-block bg-green-500 text-white rounded-full px-3 py-1">{{ cita.paciente.full_name }}</span></td>
-                        <td class="py-3 px-6 text-left">
-                            <span class="text-blue-500 font-semibold">{{ cita.fecha|date:"d M Y" }}</span>
-                        </td>
-                        <td class="py-3 px-6 text-left">
-                            <span class="text-blue-500 font-semibold">{{ cita.hora_inicio }}</span>
-                        </td>
-                        <td class="py-3 px-6 text-left">
-                            {% if cita.estado_cita == 'confirmada' %}
-                            <span class="inline-block bg-green-200 text-green-800 rounded-full px-3 py-1">Confirmada</span>
-                        {% elif cita.estado_cita == 'cancelada_paciente' %}
-                            <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Paciente</span>
-                        {% elif cita.estado_cita == 'cancelada_profesional' %}
-                            <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Profesional</span>
-                        {% else %}
-                            <span class="inline-block bg-yellow-200 text-yellow-800 rounded-full px-3 py-1">Pendiente</span>
-                        {% endif %}
-                        </td>
-                        <td class="py-3 px-6 text-left">{{ cita.notas|default:"Ninguna" }}</td>
-                        <td class="py-3 px-6 text-center">
-                            {% if cita.estado_cita == 'pendiente' %}
-                            <a href="{% url 'citas:cambiar_estado_cita' cita.id 'confirmada' %}" class="bg-green-500 text-white rounded px-4 py-1 hover:bg-green-600" title="Confirmar cita">Confirmar</a>
-                            <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_profesional' %}" class="bg-red-500 text-white rounded px-4 py-1 hover:bg-red-600" title="Cancelar cita">Cancelar</a>
+                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-2 px-4 border-b"><span class="inline-block bg-green-500 text-white rounded-full px-3 py-1">{{ cita.profesional.full_name }}</span></td>
+                    <td class="py-3 px-6 text-left">
+                        <span class="text-blue-500 font-semibold">{{ cita.fecha|date:"d M Y" }}</span>
+                    </td>
+                    <td class="py-3 px-6 text-left">
+                        <span class="text-blue-500 font-semibold">{{ cita.hora_inicio }}</span>
+                    </td>
+                    <td class="py-3 px-6 text-left">
+                        <span class="text-blue-500 font-semibold">{{ cita.descripcion }}</span>
+                    </td>
+                    
+                    <td class="py-3 px-6 text-left">
+                        {% if cita.estado_cita == 'confirmada' %}
+                        <span class="inline-block bg-green-200 text-green-800 rounded-full px-3 py-1">Confirmada</span>
+                    {% elif cita.estado_cita == 'cancelada_paciente' %}
+                        <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Paciente</span>
+                    {% elif cita.estado_cita == 'cancelada_profesional' %}
+                        <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Profesional</span>
+                    {% else %}
+                        <span class="inline-block bg-yellow-200 text-yellow-800 rounded-full px-3 py-1">Pendiente</span>
+                    {% endif %}
+                    </td>
+                    
+                    <td class="py-3 px-6 text-center">
+                        {% if cita.estado_cita == 'pendiente' %}
+                            <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
                         {% elif cita.estado_cita == 'confirmada' %}
-                            <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_profesional' %}" class="bg-red-500 text-white rounded px-4 py-1 hover:bg-red-600" title="Cancelar cita">Cancelar</a>
+                            <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
                         {% endif %}
-                        </td>
-                    </tr>
+                    </td>
+                    
+                </tr>
                 {% empty %}
                     <tr>
                         <td colspan="6" class="py-4 text-center text-gray-500">No tienes citas asignadas</td>

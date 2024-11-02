@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mx-auto mt-5">
-    <div class="flex flex-col md:flex-row justify-center items-start">
+    <div class="flex flex-col md:flex-row justify-center items-start bg-blue-100 p-6 rounded-lg">
         <!-- Sección de la imagen -->
         <div class="w-full md:w-1/2 mb-5 md:mb-0 flex justify-center ">
             <img src="{% static 'images/login-banner1.jpg' %}" alt="Imagen de Inicio de Sesión" class="img-fluid rounded shadow-lg">
@@ -23,7 +23,7 @@
                     <label for="id_password" class="block text-gray-700 italic font-bold">Contraseña:</label>
                     <input type="password" name="password" class="form-control mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="id_password" placeholder="Contraseña" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition italic">Iniciar Sesión</button>
+                <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition italic">Iniciar Sesión</button>
             </form>
              <!-- Enlace de recuperación de contraseña -->
              <div class="text-center mt-3">

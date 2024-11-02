@@ -1,32 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Agendar Cita</h2>
+<div class="container mx-auto mt-10 p-6 max-w-lg bg-blue-100 rounded-lg shadow-md">
+    <h2 class="text-2xl font-semibold mb-6">Agendar Cita</h2>
     <form method="post">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="id_fecha">Fecha:</label>
-            {{ form.fecha }}  <!-- Campo de fecha con selector de calendario -->
+        
+        <div class="mb-4">
+            <label for="id_fecha" class="block text-gray-700 font-medium mb-1">Fecha:</label>
+            {{ form.fecha }} <!-- Campo de fecha con selector de calendario -->
         </div>
-        <div class="form-group">
-            <label for="id_profesional">Profesional de la Salud:</label>
-            {{ form.profesional }}  <!-- Campo de selección de profesional -->
+        
+        <div class="mb-4">
+            <label for="id_profesional" class="block text-gray-700 font-medium mb-1">Profesional de la Salud:</label>
+            {{ form.profesional }} <!-- Campo de selección de profesional -->
         </div>
-        <div class="form-group">
-            <label for="id_hora_inicio">Hora de Inicio:</label>
-            {{ form.hora_inicio }}  <!-- Select para las horas disponibles -->
+        
+        <div class="mb-4">
+            <label for="id_hora_inicio" class="block text-gray-700 font-medium mb-1">Hora de Inicio:</label>
+            {{ form.hora_inicio }} <!-- Select para las horas disponibles -->
             {% if form.hora_inicio.errors %}
-            <div class="text-danger">
+            <div class="text-red-600 mt-1">
                 {{ form.hora_inicio.errors.0 }}
             </div>
-        {% endif %}
+            {% endif %}
         </div>
-        <div class="form-group">
-            <label for="id_descripcion">Descripción:</label>
-            {{ form.descripcion }}
+        
+        <div class="mb-4">
+            <label for="id_descripcion" class="mt-1 block w-full py-2 px-3">Sintoma principal:</label>
+         {{ form.descripcion }}
         </div>
-        <button type="submit" class="btn btn-primary">Agendar Cita</button>
+        
+        <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200">
+            Agendar Cita
+        </button>
     </form>
 </div>
 {% endblock %}

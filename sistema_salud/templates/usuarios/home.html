@@ -2,133 +2,137 @@
 {% load static %}
 
 {% block content %}
-<div class="container mx-auto mt-5">
-    <div class="flex flex-col md:flex-row justify-center items-start bg-blue-100 p-6 rounded-lg shadow-md">
-        <!-- Sección de la imagen -->
-        <div class="w-full md:w-1/2 mb-5 md:mb-0 flex justify-center">
-            <img src="{% static 'images/banner-home.jpg' %}" alt="Imagen de Salud" class="rounded-lg shadow-lg">
-        </div>
 
-        <!-- Sección del formulario -->
-        <div class="w-full md:w-1/2 md:ml-6">
-            <div class="bg-white rounded-lg p-6 shadow-lg">
-                {% if user.is_authenticated %}
-                <h1 class="text-3xl font-bold mb-4 italic">Bienvenido, {{ user.full_name }}!</h1>
-                <p class="mb-3 italic font-bold">Gracias por ser parte de nuestra plataforma. ¡Estamos encantados de que estés aquí!</p>
-                <p class="mt-3 italic font-bold">Explora las diferentes funcionalidades que tenemos disponibles para ti.</p>
-                <a href="{% url 'usuarios:buscar_profesionales' %}" class="inline-block mt-3 bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600 transition">Buscar Profesionales de la Salud</a>
-                <img src="{% static 'images/banner-user.jpg' %}" alt="Imagen de Salud" class="rounded-lg shadow-lg mt-4">
-                {% else %}
-                <h1 class="text-3xl font-bold mb-4 italic">Bienvenido al Sistema de Salud</h1>
-                <p class="mb-3 italic">Encuentra profesionales de la salud y gestiona tus citas fácilmente.</p>
-
-                <!-- Sección del formulario de registro -->
-                <h2 class="text-2xl font-semibold text-center italic mb-3">Registro de Usuario</h2>
-
-                <!-- Formulario -->
-                <form method="post" class="space-y-4">
-                    {% csrf_token %}
-                    <div>
-                        <label for="{{ form.username.id_for_label }}" class="block text-gray-700 italic">Nombre de Usuario</label>
-                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" value="{{ form.username.value|default_if_none:'' }}" required>
-                    </div>
-
-                    <div>
-                        <label for="{{ form.email.id_for_label }}" class="block text-gray-700 italic">Email</label>
-                        <input type="email" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" value="{{ form.email.value|default_if_none:'' }}" required>
-                    </div>
-
-                    <div>
-                        <label for="{{ form.full_name.id_for_label }}" class="block text-gray-700 italic">Nombre Completo</label>
-                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.full_name.id_for_label }}" name="{{ form.full_name.html_name }}" value="{{ form.full_name.value|default_if_none:'' }}" required>
-                    </div>
-
-                    <div>
-                        <label for="{{ form.phone.id_for_label }}" class="block text-gray-700 italic">Número de Teléfono</label>
-                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.phone.id_for_label }}" name="{{ form.phone.html_name }}" value="{{ form.phone.value|default_if_none:'' }}" required>
-                    </div>
-
-                    <div>
-                        <label for="{{ form.user_type.id_for_label }}" class="block text-gray-700 italic">Tipo de Usuario</label>
-                        <select class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.user_type.id_for_label }}" name="{{ form.user_type.html_name }}" required>
-                            {% for option in form.user_type.field.choices %}
-                                <option value="{{ option.0 }}" {% if form.user_type.value == option.0 %}selected{% endif %}>{{ option.1 }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="{{ form.password1.id_for_label }}" class="block text-gray-700 italic">Contraseña</label>
-                        <input type="password" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" required>
-                    </div>
-
-                    <div>
-                        <label for="{{ form.password2.id_for_label }}" class="block text-gray-500 italic">Confirmar Contraseña</label>
-                        <input type="password" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" required>
-                    </div>
-
-                    <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition">Registrar</button>
-                </form>
+    <!-- Contenido Principal -->
+    <div class="flex-1 p-5 md:ml-1/4">
+        <div class="container mx-auto mt-10">
+            <!-- Si el usuario ya está autenticado, muestra la tarjeta de bienvenida -->
+            {% if user.is_authenticated %}
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-500 p-8 rounded-lg shadow-lg">
+                <h1 class="text-4xl font-bold text-white mb-6 italic">¡Bienvenido, {{ user.full_name }}!</h1>
+                <p class="text-lg text-white mb-4">Gracias por ser parte de nuestra plataforma. ¡Estamos encantados de que estés aquí!</p>
+                <p class="text-lg text-white mb-6">Explora las funcionalidades que tenemos disponibles para ti y encuentra profesionales de la salud a un solo clic.</p>
                 
-                <div class="mt-3 text-center">
-                    <p class="italic">¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}" class="text-blue-500 hover:underline italic">Inicia sesión aquí</a>.</p>
+                <div class="mt-8 text-center">
+                    <img src="{% static 'images/banner-user.jpg' %}" alt="Imagen de Salud" class="w-full rounded-lg shadow-xl">
                 </div>
+            </div>
+            {% else %}
+            <!-- Si el usuario no está autenticado, muestra la tarjeta de registro -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-500 p-8 rounded-lg shadow-lg">
+                    <h1 class="text-4xl font-bold text-white mb-6 italic">¡Bienvenido al Sistema de Salud!</h1>
+                    <p class="text-lg text-white mb-6">Encuentra profesionales de la salud y gestiona tus citas de manera fácil y rápida.</p>
+                    <img src="{% static 'images/banner-user.jpg' %}" alt="Imagen de Salud" class="w-full rounded-lg shadow-xl">
+                </div>
+                
 
-                <!-- Mostrar mensajes de éxito o error -->
-                {% for message in messages %}
+                <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                    <h2 class="text-3xl font-semibold text-center text-blue-600 italic mb-5">Regístrate para acceder a nuestras funcionalidades</h2>
+
+                    <form method="post">
+                        {% csrf_token %}
+                            
+                        <div>
+                            <label for="{{ form.username.id_for_label }}" class="block text-gray-700 italic">Rut de Usuario</label>
+                            <input type="text" class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" value="{{ form.username.value|default_if_none:'' }}" required>
+                        </div>
+
+                        <div>
+                            <label for="{{ form.email.id_for_label }}" class="block text-gray-700 italic">Correo Electrónico</label>
+                            <input type="email" class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" value="{{ form.email.value|default_if_none:'' }}" required>
+                        </div>
+
+                        <div>
+                            <label for="{{ form.full_name.id_for_label }}" class="block text-gray-700 italic">Nombre Completo</label>
+                            <input type="text" class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="{{ form.full_name.id_for_label }}" name="{{ form.full_name.html_name }}" value="{{ form.full_name.value|default_if_none:'' }}" required>
+                        </div>
+
+                        <div>
+                            <label for="{{ form.phone.id_for_label }}" class="block text-gray-700 italic">Número de Teléfono</label>
+                            <input type="text" class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="{{ form.phone.id_for_label }}" name="{{ form.phone.html_name }}" value="{{ form.phone.value|default_if_none:'' }}" required>
+                        </div>
+
+                        <div>
+                            <label for="{{ form.user_type.id_for_label }}" class="block text-gray-700 italic">Tipo de Usuario</label>
+                            <select class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="{{ form.user_type.id_for_label }}" name="{{ form.user_type.html_name }}" required>
+                                {% for option in form.user_type.field.choices %}
+                                    <option value="{{ option.0 }}" {% if form.user_type.value == option.0 %}selected{% endif %}>{{ option.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="{{ form.password1.id_for_label }}" class="block text-gray-700 italic">Contraseña</label>
+                            <input type="password" class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" required>
+                        </div>
+
+                        <div>
+                            <label for="{{ form.password2.id_for_label }}" class="block text-gray-500 italic">Confirmar Contraseña</label>
+                            <input type="password" class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" required>
+                        </div>
+                        <div>
+                            <label for="id_ciudad" class="block text-gray-700 italic">Ciudad</label>
+                            <select id="id_ciudad" name="ciudad" class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+
+                                <option value="">Selecciona una ciudad</option>
+                                {% for ciudad in ciudades %}
+                                    <option value="{{ ciudad }}">{{ ciudad }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+    
+                        <div>
+                            <label for="id_comuna" class="block text-gray-700 italic">Comuna</label>
+                            <select id="id_comuna" name="comuna" class="mt-2 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                <option value="">Selecciona una comuna</option>
+                            </select>
+                        </div>
+                        
+
+                        <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">
+                            Registrar
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="italic text-gray-600">¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}" class="text-blue-500 hover:underline italic">Inicia sesión aquí</a>.</p>
+                    </div>
+
+                    {% for message in messages %}
                     <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 rounded mt-3 italic">{{ message }}</div>
-                {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Carrusel simple de imágenes -->
-   <!-- Carrusel simple de imágenes -->
-   <div class="mt-8">
-    <h2 class="text-2xl font-bold text-center mb-4">Nuestros Servicios</h2>
-    <div class="relative container mx-auto mt-5">
-        <div class="overflow-hidden rounded-lg w-full">
-            <div id="carousel-inner" class="carousel-inner flex w-[200%] transition-transform duration-300 ease-in-out mx-auto">
-                <!-- Slide 1 -->
-                <div class="carousel-item flex w-full flex-shrink-0 space-x-4 justify-center">
-                    <img src="{% static 'images/home/kine.jpg' %}" alt="Servicio 1" class="w-64 h-64 rounded-lg shadow-lg object-cover">
-                    <img src="{% static 'images/home/dentista.jpg' %}" alt="Servicio 2" class="w-64 h-64 rounded-lg shadow-lg object-cover">
-                    <img src="{% static 'images/home/toma_muestras.jpg' %}" alt="Servicio 3" class="w-64 h-64 rounded-lg shadow-lg object-cover">
+                    {% endfor %}
                 </div>
-                <!-- Slide 2 -->
-                <div class="carousel-item flex w-full flex-shrink-0 space-x-4 justify-center">
-                    <img src="{% static 'images/home/doctor.jpg' %}" alt="Servicio 4" class="w-64 h-64 rounded-lg shadow-lg object-cover">
-                    <img src="{% static 'images/service5.jpg' %}" alt="Servicio 5" class="w-64 h-64 rounded-lg shadow-lg object-cover">
-                    <img src="{% static 'images/service6.jpg' %}" alt="Servicio 6" class="w-64 h-64 rounded-lg shadow-lg object-cover">
-                </div> 
             </div>
+            {% endif %}
         </div>
-
-        <!-- Botones de navegación -->
-        <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition" onclick="prevSlide()">&#10094;</button>
-        <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition" onclick="nextSlide()">&#10095;</button>
     </div>
-</div>
-
-<script>
-    let currentIndex = 0;
-    const slides = document.querySelectorAll('.carousel-item');
-    const totalSlides = slides.length;
-
-    function updateSlidePosition() {
-        document.getElementById('carousel-inner').style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
-
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % totalSlides;
-        updateSlidePosition();
-    }
-
-    function prevSlide() {
-        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-        updateSlidePosition();
-    }
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ciudadSelect = document.getElementById("id_ciudad");
+            const comunaSelect = document.getElementById("id_comuna");
+    
+            // Cargar comunas por ciudad desde el contexto
+            const comunasPorCiudad = JSON.parse('{{ comunas_por_ciudad|escapejs }}');
+    
+            ciudadSelect.addEventListener("change", function () {
+                const ciudad = this.value;
+    
+                // Limpiar opciones actuales en el campo de comuna
+                comunaSelect.innerHTML = '<option value="">Selecciona una comuna</option>';
+    
+                // Verificar si hay comunas para la ciudad seleccionada
+                if (comunasPorCiudad[ciudad]) {
+                    comunasPorCiudad[ciudad].forEach(comuna => {
+                        const option = document.createElement("option");
+                        option.value = comuna;
+                        option.textContent = comuna;
+                        comunaSelect.appendChild(option);
+                    });
+                }
+            });
+        });
+    </script>
+    
 
 {% endblock %}

@@ -2,36 +2,54 @@
 
 {% block content %}
 <div class="container mx-auto mt-10 p-6 max-w-lg bg-blue-100 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold mb-6">Agendar Cita</h2>
+    <h2 class="text-2xl font-semibold mb-6 text-center text-blue-800">Agendar Cita</h2>
+    
     <form method="post">
         {% csrf_token %}
         
-        <div class="mb-4">
-            <label for="id_fecha" class="block text-gray-700 font-medium mb-1">Fecha:</label>
-            {{ form.fecha }} <!-- Campo de fecha con selector de calendario -->
+        <!-- Fecha -->
+        <div class="mb-6">
+            <label for="id_fecha" class="block text-gray-700 font-medium mb-2">Fecha:</label>
+            <div class="flex items-center">
+                <i class="fas fa-calendar-alt text-gray-500 mr-3"></i>
+                {{ form.fecha }} <!-- Campo de fecha con selector de calendario -->
+            </div>
         </div>
         
-        <div class="mb-4">
-            <label for="id_profesional" class="block text-gray-700 font-medium mb-1">Profesional de la Salud:</label>
-            {{ form.profesional }} <!-- Campo de selección de profesional -->
+        <!-- Profesional -->
+        <div class="mb-6">
+            <label for="id_profesional" class="block text-gray-700 font-medium mb-2">Profesional de la Salud:</label>
+            <div class="flex items-center">
+                <i class="fas fa-user-md text-gray-500 mr-3"></i>
+                {{ form.profesional }} <!-- Campo de selección de profesional -->
+            </div>
         </div>
         
-        <div class="mb-4">
-            <label for="id_hora_inicio" class="block text-gray-700 font-medium mb-1">Hora de Inicio:</label>
-            {{ form.hora_inicio }} <!-- Select para las horas disponibles -->
+        <!-- Hora de Inicio -->
+        <div class="mb-6">
+            <label for="id_hora_inicio" class="block text-gray-700 font-medium mb-2">Hora de Inicio:</label>
+            <div class="flex items-center">
+                <i class="fas fa-clock text-gray-500 mr-3"></i>
+                {{ form.hora_inicio }} <!-- Select para las horas disponibles -->
+            </div>
             {% if form.hora_inicio.errors %}
             <div class="text-red-600 mt-1">
-                {{ form.hora_inicio.errors.0 }}
+                {{ form.hora_inicio.errors }}
             </div>
             {% endif %}
         </div>
         
-        <div class="mb-4">
-            <label for="id_descripcion" class="mt-1 block w-full py-2 px-3">Sintoma principal:</label>
-         {{ form.descripcion }}
+        <!-- Sintoma principal -->
+        <div class="mb-6">
+            <label for="id_descripcion" class="block text-gray-700 font-medium mb-2">Síntoma principal:</label>
+            <div class="flex items-center">
+                <i class="fas fa-heartbeat text-gray-500 mr-3"></i>
+                {{ form.descripcion }} <!-- Campo para describir el síntoma -->
+            </div>
         </div>
-        
-        <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200">
+
+        <!-- Botón de envío -->
+        <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition duration-200">
             Agendar Cita
         </button>
     </form>

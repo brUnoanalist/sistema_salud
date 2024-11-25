@@ -4,53 +4,145 @@
 <div class="container mx-auto mt-10">
     <div class="flex justify-center">
         <div class="w-full md:w-1/2">
-            <h1 class="text-center text-2xl font-bold mb-6 italic">Editar Perfil</h1>
-            <form method="post" enctype="multipart/form-data" class="bg-blue-100 p-6 shadow-md rounded-lg">
+            <h1 class="text-center text-2xl font-bold mb-6 italic text-blue-800">Editar Perfil</h1>
+            
+            <form method="post" enctype="multipart/form-data" class="bg-white p-6 shadow-lg rounded-lg border border-gray-200">
                 {% csrf_token %}
-                <div class="mb-4">
-                    <label for="username" class="block text-gray-700 font-semibold italic">Nombre de Usuario</label>
-                    <input type="text" name="username" id="username" value="{{ user.username }}" class="mt-1 block w-full border rounded-lg py-2 px-3 bg-gray-100" readonly>
-                    <small class="text-gray-600">No puedes cambiar tu nombre de usuario.</small>
-                </div>
-                <div class="mb-4">
+                
+                <!-- Mostrar errores del formulario -->
+                {% if form.errors %}
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+                        <strong>Por favor, corrige los siguientes errores:</strong>
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <!-- Foto de Perfil -->
+                <div class="flex flex-col items-center mb-6">
                     {% if user.profile_picture %}
                         <img src="{{ user.profile_picture.url }}" alt="Foto de Perfil" class="w-32 h-32 rounded-full shadow-md mb-3">
+                    {% else %}
+                        <div class="w-32 h-32 rounded-full bg-gray-300 flex items-center justify-center text-gray-500 mb-3">
+                            <span class="text-3xl">👤</span>
+                        </div>
                     {% endif %}
                     {{ form.profile_picture.label_tag }}
                     {{ form.profile_picture }}
                 </div>
-                <div class="mb-4">
-                    <label for="email" class="block text-gray-700 font-semibold italic">Correo Electrónico</label>
-                    <input type="email" name="email" id="email" value="{{ user.email }}" class="mt-1 block w-full border rounded-lg py-2 px-3" required>
-                </div>
-                <div class="mb-4">
-                    <label for="full_name" class="block text-gray-700 font-semibold italic">Nombre Completo</label>
-                    <input type="text" name="full_name" id="full_name" value="{{ user.full_name }}" class="mt-1 block w-full border rounded-lg py-2 px-3" required>
-                </div>
-                <div class="mb-4">
-                    <label for="phone" class="block text-gray-700 font-semibold italic">Teléfono</label>
-                    <input type="text" name="phone" id="phone" value="{{ user.phone }}" class="mt-1 block w-full border rounded-lg py-2 px-3" required>
-                </div>
-                <div class="mb-4">
-                    <label for="user_type" class="block text-gray-700 font-semibold italic">Tipo de Usuario</label>
-                    <input type="hidden" name="user_type" id="user_type" value="{{ user.user_type }}">
-                    <input type="text" class="mt-1 block w-full border rounded-lg py-2 px-3 bg-gray-100" value="{{ user.get_user_type_display }}" readonly>
-                </div>
-                {% if user.user_type == 'profesional' %}
-                <div class="form-group">
-                 <label for="id_specialties"  class="block text-sm font-medium text-gray-700">Especialidades:</label>
-                 <input type="text" name="specialties" id="specialties" value="{{ user.specialties }}" class="mt-1 block w-full border rounded-lg py-2 px-3" required>
+
+                <!-- Campos del Formulario -->
+                <div class="space-y-6">
+                    <!-- Nombre de Usuario -->
+                    <div>
+                        <label for="username" class="block text-gray-700 font-semibold italic">Rut de Usuario</label>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-user text-blue-500 mr-3"></i>
+                            <input type="text" name="username" id="username" value="{{ user.username }}" class="mt-1 block w-full border rounded-lg py-2 px-3 bg-gray-100 text-gray-700" readonly>
+                        </div>
+                        <small class="text-gray-500">No puedes cambiar tu nombre de usuario.</small>
                     </div>
-                    <div class="mb-4">
-                        <label for="id_bio" class="block text-sm font-medium text-gray-700">Bio:</label>
-                        <input type="text" name="bio" id="bio" value="{{ user.Bio }}" class="mt-1 block w-full border rounded-lg py-2 px-3" required>
+
+                    <!-- Correo Electrónico -->
+                    <div>
+                        <label for="email" class="block text-gray-700 font-semibold italic">Correo Electrónico</label>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-envelope text-blue-500 mr-3"></i>
+                            <input type="email" name="email" id="email" value="{{ user.email }}" class="mt-1 block w-full border rounded-lg py-2 px-3 focus:outline-blue-400" required>
+                        </div>
                     </div>
-                {% endif %}
+
+                    <!-- Nombre Completo -->
+                    <div>
+                        <label for="full_name" class="block text-gray-700 font-semibold italic">Nombre Completo</label>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-id-card text-blue-500 mr-3"></i>
+                            <input type="text" name="full_name" id="full_name" value="{{ user.full_name }}" class="mt-1 block w-full border rounded-lg py-2 px-3 focus:outline-blue-400" required>
+                        </div>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div>
+                        <label for="phone" class="block text-gray-700 font-semibold italic">Teléfono</label>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-phone-alt text-blue-500 mr-3"></i>
+                            <input type="text" name="phone" id="phone" value="{{ user.phone }}" class="mt-1 block w-full border rounded-lg py-2 px-3 focus:outline-blue-400" required>
+                        </div>
+                    </div>
+
+                    <!-- Tipo de Usuario -->
+                    <div>
+                        <label for="user_type" class="block text-gray-700 font-semibold italic">Tipo de Usuario</label>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-user-tag text-blue-500 mr-3"></i>
+                            <input type="text" class="mt-1 block w-full border rounded-lg py-2 px-3 bg-gray-100 text-gray-700" value="{{ user.get_user_type_display }}" readonly>
+                        </div>
+                        <input type="hidden" name="user_type" id="user_type" value="{{ user.user_type }}">
+                    </div>
+            
+                    <!-- Select de ciudad con envío automático al cambiar la selección -->
+        <select 
+        name="ciudad" 
+        class="border border-gray-300 rounded-lg p-2 w-full md:w-1/2 mt-2" 
+        onchange="this.form.submit()" 
+        title="Al seleccionar una ciudad, el formulario se enviará automáticamente."
+    >
+        <option value="">Seleccione Ciudad</option>
+        {% for ciudad_opcion in ciudades_disponibles %}
+            <option value="{{ ciudad_opcion }}" {% if ciudad == ciudad_opcion %}selected{% endif %}>
+                {{ ciudad_opcion }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Select de comuna, que se actualizará tras recargar la página -->
+    <select 
+        name="comuna" 
+        class="border border-gray-300 rounded-lg p-2 w-full md:w-1/2 mt-2"
+    >
+        <option value="">Seleccione Comuna</option>
+        {% for comuna_opcion in comunas_disponibles %}
+            <option value="{{ comuna_opcion }}" {% if comuna == comuna_opcion %}selected{% endif %}>
+                {{ comuna_opcion }}
+            </option>
+        {% endfor %}
+    </select>
+  
+
+    
+                    {% if user.user_type == 'profesional' %}
+                        <!-- Especialidad (solo para profesionales) -->
+                        <div>
+                            <label for="specialties" class="block text-gray-700 font-semibold italic">Especialidad</label>
+                            <div class="flex items-center space-x-2 mb-4">
+                                <i class="fas fa-cogs text-gray-500"></i>
+                                <input type="text" name="specialties" id="specialties" value="{{ user.specialties }}" class="mt-1 block w-full border rounded-lg py-2 px-3 focus:outline-blue-400" required>
+                            </div>
+                        </div>
+
+                        <!-- Bio (solo para profesionales) -->
+                        <div>
+                            <label for="bio" class="block text-gray-700 font-semibold italic">Bio</label>
+                            <div class="flex items-center space-x-2 mb-4">
+                                <i class="fas fa-pencil-alt text-gray-500"></i>
+                                <textarea name="bio" id="bio" class="mt-1 block w-full border rounded-lg py-2 px-3 focus:outline-blue-400" required>{{ user.bio }}</textarea>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Botón de Enviar -->
                 <div class="flex justify-center mt-6">
-                    <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition italic">Actualizar Perfil</button>
+                    <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200 italic">
+                        <i class="fas fa-save mr-2"></i> Actualizar Perfil
+                    </button>
                 </div>
             </form>
-            
         </div>
     </div>
 </div>

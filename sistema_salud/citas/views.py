@@ -1,8 +1,10 @@
 # citas/views.py
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .models import Cita
+from .models import Cita,CustomUser
 from .forms import CitaForm, BloquearHorarioForm
+
 
 
 # Paciente: Ver y agendar citas
@@ -14,33 +16,47 @@ def lista_citas_paciente(request):
 # Profesional: Ver citas asignadas
 @login_required
 def lista_citas_profesional(request):
-    citas = Cita.objects.filter(profesional=request.user)
-    return render(request, 'citas/lista_citas_profesional.html', {'citas': citas})
+    today = timezone.now().date()
+    tomorrow = today + timezone.timedelta(days=1)
+
+    # Filtrar las citas del profesional actual
+    citas_hoy = Cita.objects.filter(profesional=request.user, fecha=today).order_by('hora_inicio')
+    citas_manana = Cita.objects.filter(profesional=request.user, fecha=tomorrow).order_by('hora_inicio')
+    proximas_citas = Cita.objects.filter(profesional=request.user, fecha__gt=tomorrow).order_by('fecha', 'hora_inicio')
+
+    context = {
+        'citas_hoy': citas_hoy,
+        'citas_manana': citas_manana,
+        'proximas_citas': proximas_citas,
+    }
+    return render(request, 'citas/lista_citas_profesional.html', context)
 
 
 
 
 def agendar_cita(request):
-    horas_disponibles = ['08:00', '08:30', '09:00', '09:30', '10:00','11:00', '11:30', '12:00', '12:30', '14:00']  # Ejemplo de horas disponibles
+    horas_disponibles = ['08:00', '08:30', '09:00', '09:30', '10:00', '11:00', '11:30', '12:00', '12:30', '14:00']
+    
+    # Obtener el ID del profesional desde la URL
+    profesional_id = request.GET.get('profesional_id')
+    profesional = None
+    
+    if profesional_id:
+        # Obtener el objeto de profesional basado en el ID pasado
+        profesional = get_object_or_404(CustomUser, id=profesional_id, user_type='profesional')
 
     if request.method == 'POST':
-        print("Método POST recibido.")
-        print("Datos del formulario:", request.POST) 
-        form = CitaForm(request.POST, horas_disponibles=horas_disponibles)  # Pasar horas disponibles aquí
+        form = CitaForm(request.POST, horas_disponibles=horas_disponibles)
         if form.is_valid():
-            print("Formulario válido.")
-            print("Datos del formulario:", form.cleaned_data)
-
-            # Verificar si ya existe una cita para el profesional, fecha y hora
+            # Comprobar si ya existe una cita en esa fecha y hora con el profesional
             if Cita.objects.filter(
                 profesional=form.cleaned_data['profesional'],
                 fecha=form.cleaned_data['fecha'],
                 hora_inicio=form.cleaned_data['hora_inicio']
             ).exists():
-                print("Error: Ya existe una cita agendada para esta hora.")
                 form.add_error('hora_inicio', 'Esta hora ya está ocupada por otra cita.')
             else:
-                # Crear el objeto Cita con los datos del formulario
+                # Guardar la cita si es válida y no hay conflicto de horarios
                 cita = Cita(
                     paciente=request.user,
                     profesional=form.cleaned_data['profesional'],
@@ -51,18 +67,13 @@ def agendar_cita(request):
                     estado_cita='pendiente',
                 )
                 cita.save()
-                print("Cita guardada:", cita)
-                
-                # Redirigir a una página de éxito o mostrar un mensaje
-                return redirect('home')
-
-        if not form.is_valid():
-            print("Errores del formulario:", form.errors)  
-        else:
-            print("Errores del formulario:", form.errors)
+                return redirect('citas:lista_citas_paciente')
     else:
-        print("Método GET recibido.")
-        form = CitaForm(horas_disponibles=horas_disponibles)  # Pasar horas disponibles aquí
+        # Configurar el formulario con el profesional preseleccionado
+        form = CitaForm(
+            horas_disponibles=horas_disponibles,
+            initial={'profesional': profesional} if profesional else None
+        )
 
     return render(request, 'citas/agendar_cita.html', {'form': form, 'horas_disponibles': horas_disponibles})
 

@@ -10,15 +10,19 @@ class CitaForm(forms.ModelForm):
         fields = ['fecha', 'profesional', 'hora_inicio', 'descripcion']
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'profesional': forms.Select(attrs={'class': 'form-control'}),
+            'profesional': forms.Select(attrs={'class': 'form-select'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),  # Ajustar descripción
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args,  profesional_id=None, **kwargs):
         horas_disponibles = kwargs.pop('horas_disponibles', [])
         super().__init__(*args, **kwargs)
         self.fields['hora_inicio'].choices = [(hora, hora) for hora in horas_disponibles]
         self.fields['profesional'].queryset = CustomUser.objects.filter(user_type='profesional')
+        if profesional_id:
+            # Si se pasa un profesional, se selecciona como predeterminado
+            self.fields['profesional'].initial = profesional_id
+        self.fields['hora_inicio'].choices = [(hora, hora) for hora in horas_disponibles]
     
     
     def clean(self):

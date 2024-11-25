@@ -1,67 +1,149 @@
-<!-- citas/templates/citas/lista_citas_paciente.html -->
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="container mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
     <h2 class="text-4xl font-bold text-blue-600 mb-6">
-        Mi Agenda
+        Citas Asignadas
     </h2>
 
+    <!-- Dashboard de Citas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-blue-100 p-4 rounded-lg shadow">
+            <h5 class="font-bold">Citas de Hoy</h5>
+            <p class="text-lg">{{ citas_hoy.count }}</p>
+        </div>
+        <div class="bg-yellow-100 p-4 rounded-lg shadow">
+            <h5 class="font-bold">Citas de Mañana</h5>
+            <p class="text-lg">{{ citas_manana.count }}</p>
+        </div>
+        <div class="bg-green-100 p-4 rounded-lg shadow">
+            <h5 class="font-bold">Próximas Citas</h5>
+            <p class="text-lg">{{ citas_proximas.count }}</p>
+        </div>
+    </div>
 
-    <div class="overflow-x-auto rounded-lg shadow-md">
-        <table class="min-w-full bg-white">
-            <thead>
-                <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
-                    <th class="py-3 px-6 text-left">Paciente</th>
-                    <th class="py-3 px-6 text-left">Fecha</th>
-                    <th class="py-3 px-6 text-left">Hora de Inicio</th>
-                    <th class="py-3 px-6 text-left">Sintomas</th>
-                    <th class="py-3 px-6 text-left">Estado</th>
-                    <th class="py-3 px-6 text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-600 text-sm font-light">
-                {% for cita in citas %}
-                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                    <td class="py-2 px-4 border-b"><span class="inline-block bg-green-500 text-white rounded-full px-3 py-1">{{ cita.profesional.full_name }}</span></td>
-                    <td class="py-3 px-6 text-left">
-                        <span class="text-blue-500 font-semibold">{{ cita.fecha|date:"d M Y" }}</span>
-                    </td>
-                    <td class="py-3 px-6 text-left">
-                        <span class="text-blue-500 font-semibold">{{ cita.hora_inicio }}</span>
-                    </td>
-                    <td class="py-3 px-6 text-left">
-                        <span class="text-blue-500 font-semibold">{{ cita.descripcion }}</span>
-                    </td>
-                    
-                    <td class="py-3 px-6 text-left">
-                        {% if cita.estado_cita == 'confirmada' %}
-                        <span class="inline-block bg-green-200 text-green-800 rounded-full px-3 py-1">Confirmada</span>
-                    {% elif cita.estado_cita == 'cancelada_paciente' %}
-                        <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Paciente</span>
-                    {% elif cita.estado_cita == 'cancelada_profesional' %}
-                        <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Profesional</span>
-                    {% else %}
-                        <span class="inline-block bg-yellow-200 text-yellow-800 rounded-full px-3 py-1">Pendiente</span>
-                    {% endif %}
-                    </td>
-                    
-                    <td class="py-3 px-6 text-center">
-                        {% if cita.estado_cita == 'pendiente' %}
-                            <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
-                        {% elif cita.estado_cita == 'confirmada' %}
-                            <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
-                        {% endif %}
-                    </td>
-                    
-                </tr>
-                {% empty %}
+    <div class="mt-6">
+        <h3 class="text-2xl font-semibold mb-2">Citas de Hoy</h3>
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">Paciente</th>
+                        <th class="py-3 px-6 text-left">Fecha</th>
+                        <th class="py-3 px-6 text-left">Hora de Inicio</th>
+                        <th class="py-3 px-6 text-left">Sintomas</th>
+                        <th class="py-3 px-6 text-left">Estado</th>
+                        <th class="py-3 px-6 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600 text-sm font-light">
+                    {% for cita in citas_hoy %}
+                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="py-2 px-4 border-b">
+                            <a href="#" class="inline-block bg-green-500 text-white rounded-full px-3 py-1">{{ cita.paciente.full_name }}</a>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <span class="text-blue-500 font-semibold">{{ cita.fecha|date:"d M Y" }}</span>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <span class="text-blue-500 font-semibold">{{ cita.hora_inicio }}</span>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <span class="text-blue-500 font-semibold">{{ cita.descripcion }}</span>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            {% if cita.estado_cita == 'confirmada' %}
+                                <span class="inline-block bg-green-200 text-green-800 rounded-full px-3 py-1">Confirmada</span>
+                            {% elif cita.estado_cita == 'cancelada_paciente' %}
+                                <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Paciente</span>
+                            {% elif cita.estado_cita == 'cancelada_profesional' %}
+                                <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Profesional</span>
+                            {% else %}
+                                <span class="inline-block bg-yellow-200 text-yellow-800 rounded-full px-3 py-1">Pendiente</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-6 text-center">
+                            {% if cita.estado_cita == 'pendiente' %}
+                                <a href="{% url 'citas:cambiar_estado_cita' cita.id 'confirmada' %}" class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm">Confirmar</a>
+                                <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
+                            {% elif cita.estado_cita == 'confirmada' %}
+                                <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
                     <tr>
-                        <td colspan="6" class="py-4 text-center text-gray-500">No tienes citas asignadas</td>
+                        <td colspan="6" class="py-4 text-center text-gray-500">No hay próximas citas programadas.</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+
+
+    <!-- Similar sección para las citas de mañana y próximas citas -->
+
+    <div class="mt-6">
+        <h3 class="text-2xl font-semibold mb-2">Citas de Mañana</h3>
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">Paciente</th>
+                        <th class="py-3 px-6 text-left">Fecha</th>
+                        <th class="py-3 px-6 text-left">Hora de Inicio</th>
+                        <th class="py-3 px-6 text-left">Sintomas</th>
+                        <th class="py-3 px-6 text-left">Estado</th>
+                        <th class="py-3 px-6 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600 text-sm font-light">
+                    {% for cita in citas_manana %}
+                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="py-2 px-4 border-b">
+                            <a href="#" class="text-blue-500 hover:underline font-semibold">{{ cita.paciente.full_name }}</a>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <span class="text-blue-500 font-semibold">{{ cita.fecha|date:"d M Y" }}</span>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <span class="text-blue-500 font-semibold">{{ cita.hora_inicio }}</span>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <span class="text-blue-500 font-semibold">{{ cita.descripcion }}</span>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            {% if cita.estado_cita == 'confirmada' %}
+                                <span class="inline-block bg-green-200 text-green-800 rounded-full px-3 py-1">Confirmada</span>
+                            {% elif cita.estado_cita == 'cancelada_paciente' %}
+                                <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Paciente</span>
+                            {% elif cita.estado_cita == 'cancelada_profesional' %}
+                                <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Profesional</span>
+                            {% else %}
+                                <span class="inline-block bg-yellow-200 text-yellow-800 rounded-full px-3 py-1">Pendiente</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-6 text-center">
+                            {% if cita.estado_cita == 'pendiente' %}
+                                <a href="{% url 'citas:cambiar_estado_cita' cita.id 'confirmada' %}" class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm">Confirmar</a>
+                                <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
+                            {% elif cita.estado_cita == 'confirmada' %}
+                                <a href="{% url 'citas:cambiar_estado_cita' cita.id 'cancelada_paciente' %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">Cancelar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="py-4 text-center text-gray-500">No hay próximas citas programadas.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+                    
+            
 {% endblock %}

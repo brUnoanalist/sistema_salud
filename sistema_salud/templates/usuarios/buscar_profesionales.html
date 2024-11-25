@@ -1,61 +1,94 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 <div class="container mx-auto mt-10 px-4">
-    <h2 class="text-2xl font-bold mb-6">Buscar Profesionales</h2>
+    <h2 class="text-2xl font-bold mb-6 text-center md:text-left">Buscar Profesionales</h2>
     
-    <form method="get" class="mb-6">
-        <input type="text" name="q" placeholder="Buscar por especialidad" class="border border-gray-300 rounded-lg p-2 w-full md:w-1/2">
-        <button type="submit" class="bg-blue-500 text-white rounded-lg p-2 mt-2 hover:bg-blue-600">Buscar</button>
+    <form method="get" class="mb-6 bg-gray-100 p-4 rounded-lg shadow-sm">
+        <input 
+            type="text" 
+            name="q" 
+            value="{{ especialidad }}" 
+            placeholder="Buscar por especialidad" 
+            class="border border-gray-300 rounded-lg p-2 w-full md:w-1/2"
+        />
+        
+        <!-- Select de ciudad con envío automático al cambiar la selección -->
+        <select 
+            name="ciudad" 
+            class="border border-gray-300 rounded-lg p-2 w-full md:w-1/2 mt-2" 
+            onchange="this.form.submit()" 
+            title="Al seleccionar una ciudad, el formulario se enviará automáticamente."
+        >
+            <option value="">Seleccione Ciudad</option>
+            {% for ciudad_opcion in ciudades_disponibles %}
+                <option value="{{ ciudad_opcion }}" {% if ciudad == ciudad_opcion %}selected{% endif %}>
+                    {{ ciudad_opcion }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <!-- Select de comuna, que se actualizará tras recargar la página -->
+        <select 
+            name="comuna" 
+            class="border border-gray-300 rounded-lg p-2 w-full md:w-1/2 mt-2"
+        >
+            <option value="">Seleccione Comuna</option>
+            {% for comuna_opcion in comunas_disponibles %}
+                <option value="{{ comuna_opcion }}" {% if comuna == comuna_opcion %}selected{% endif %}>
+                    {{ comuna_opcion }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <button 
+            type="submit" 
+            class="bg-blue-500 text-white rounded-lg p-2 mt-2 hover:bg-blue-600 w-full md:w-auto"
+        >
+            Buscar
+        </button>
     </form>
 
+    <!-- Lista de resultados -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for profesional in profesionales %}
-            <div class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between">
-                <div>
-                    <h3 class="text-lg font-semibold">{{ profesional.full_name }}</h3>
-                    <p class="text-gray-600">Especialidades: {{ profesional.specialties }}</p>
+            <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center">
+                <div class="text-center">
+                    {% if profesional.profile_picture %}
+                        <img 
+                            src="{{ profesional.profile_picture.url }}" 
+                            alt="{{ profesional.full_name }}" 
+                            class="w-24 h-24 object-cover rounded-full mx-auto"
+                        >
+                    {% else %}
+                        <img 
+                            src="{% static 'images/default_profile_picture.jpg' %}" 
+                            alt="Default Profile" 
+                            class="w-24 h-24 object-cover rounded-full mx-auto"
+                        >
+                    {% endif %}
+                    <h3 class="text-lg font-semibold mt-4">{{ profesional.full_name }}</h3>
+                    <p class="text-gray-600 mt-1"> {{ profesional.specialties }}</p>
+                    <p class="text-gray-600 flex items-center justify-center">
+                        <i class="fas fa-map-marker-alt text-blue-500 mr-2"></i> 
+                        {{ profesional.comuna }}, {{ profesional.ciudad }}
+                    </p>
+                    <p class="text-gray-600"> {{ profesional.bio }}</p>
                 </div>
-                <a href="{% url 'citas:agendar_cita' %}?profesional_id={{ profesional.id }}" class="bg-green-500 text-white rounded-lg p-2 mt-4 text-center hover:bg-green-600">Agendar Cita</a>
+                <a 
+                    href="{% url 'citas:agendar_cita' %}?profesional_id={{ profesional.id }}" 
+                    class="bg-green-500 text-white font-semibold rounded-lg py-2 px-4 mt-4 w-full text-center hover:bg-green-600 transition"
+                >
+                    Agendar Cita
+                </a>
             </div>
         {% empty %}
-            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center text-gray-500">No se encontraron profesionales.</div>
+            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center text-gray-500">
+                No se encontraron profesionales.
+            </div>
         {% endfor %}
     </div>
-
-    <!-- Carrusel simple -->
-    <div class="mt-10">
-        <h3 class="text-xl font-semibold mb-4">Profesionales Destacados</h3>
-        <div class="relative">
-            <div class="overflow-hidden">
-                <div class="flex transition-transform duration-300" id="carousel">
-                    {% for profesional in profesionales %}
-                        <div class="flex-none w-full p-4">
-                            <div class="bg-white rounded-lg shadow-md p-4">
-                                <h3 class="text-lg font-semibold">{{ profesional.full_name }}</h3>
-                                <p class="text-gray-600">Especialidad: {{ profesional.specialties }}</p>
-                                <a href="{% url 'citas:agendar_cita' %}?profesional_id={{ profesional.id }}" class="bg-blue-500 text-white rounded-lg p-2 mt-4 block text-center hover:bg-blue-600">Agendar Cita</a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full" onclick="moveSlide(-1)">&#10094;</button>
-            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full" onclick="moveSlide(1)">&#10095;</button>
-        </div>
-    </div>
 </div>
-
-<script>
-    let currentSlide = 0;
-
-    function moveSlide(direction) {
-        const slides = document.querySelector('#carousel');
-        const totalSlides = slides.children.length;
-        currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
-        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
-    }
-</script>
 
 {% endblock %}

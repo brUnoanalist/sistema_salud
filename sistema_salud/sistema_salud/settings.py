@@ -29,7 +29,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #apps de plataforma
     'usuarios',  # Nuestra app de usuarios
-    'citas'
+    'citas',
+    
+    
 ]
 
 # Configuración para el modelo de usuario personalizado (más adelante lo configuraremos)

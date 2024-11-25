@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cita
+from .models import Cita, CitaManager
 from usuarios.models import CustomUser  # Importar el modelo CustomUser
 
 
@@ -13,4 +13,5 @@ class CitaAdmin(admin.ModelAdmin):
             kwargs["queryset"] = CustomUser.objects.filter(user_type='profesional')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-admin.site.register(Cita, CitaAdmin)
+admin.site.register(Cita, CitaAdmin  )
+

@@ -47,6 +47,8 @@
                                 <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Paciente</span>
                             {% elif cita.estado_cita == 'cancelada_profesional' %}
                                 <span class="inline-block bg-red-200 text-red-800 rounded-full px-3 py-1">Cancelada por el Profesional</span>
+                            {% elif cita.estado_cita == 'completada' %}
+                                <span class="inline-block bg-blue-500 text-white rounded-full px-3 py-1">Completada</span>
                             {% else %}
                                 <span class="inline-block bg-yellow-200 text-yellow-800 rounded-full px-3 py-1">Pendiente</span>
                             {% endif %}

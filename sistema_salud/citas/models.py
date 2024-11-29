@@ -24,6 +24,7 @@ class Cita(models.Model):
     ESTADO_CHOICES = [
         ('pendiente', 'Pendiente'),
         ('confirmada', 'Confirmada'),
+        ('completada','Completada'),
         ('cancelada_paciente', 'Cancelada por el Paciente'),
         ('cancelada_profesional', 'Cancelada por el Profesional'),
     ]
@@ -68,6 +69,11 @@ class Cita(models.Model):
         """Confirma la cita por el profesional."""
         self.estado_cita = 'confirmada'
         self.save()
+        
+    def completada(self):
+        """Completada la cita por el profesional."""
+        self.estado_cita = 'completada'
+        self.save()    
 
     class Meta:
         ordering = ['fecha']

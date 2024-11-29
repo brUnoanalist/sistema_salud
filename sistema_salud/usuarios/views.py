@@ -137,9 +137,17 @@ def editar_perfil(request):
     ciudad = request.GET.get('ciudad', user.ciudad)  # Valor predeterminado es la ciudad del usuario
     comuna = request.GET.get('comuna', user.comuna)  # Valor predeterminado es la comuna del usuario
 
-    # Obtener las ciudades y comunas para el formulario
-    ciudades_disponibles = CustomUser.objects.values_list('ciudad', flat=True).distinct()
-    comunas_disponibles = CustomUser.objects.filter(ciudad=ciudad).values_list('comuna', flat=True).distinct() if ciudad else []
+    # Obtener las ciudades y comunas para el formulario, excluyendo valores None o vacíos
+    ciudades_disponibles = CustomUser.objects.exclude(ciudad__isnull=True).exclude(ciudad__exact='').values_list('ciudad', flat=True).distinct()
+
+    comunas_disponibles = (
+    CustomUser.objects.filter(ciudad=ciudad)
+    .exclude(comuna__isnull=True)
+    .exclude(comuna__exact='')
+    .values_list('comuna', flat=True)
+    .distinct()
+    if ciudad else []
+    )
 
     if request.method == 'POST':
         form = CustomUserEditForm(request.POST, request.FILES, instance=user)
@@ -169,7 +177,7 @@ def buscar_profesionales(request):
     especialidad = request.GET.get('q', '')
 
     # Obtener las ciudades y comunas para el formulario
-    ciudades_disponibles = CustomUser.objects.values_list('ciudad', flat=True).distinct()
+    ciudades_disponibles = CustomUser.objects.exclude(ciudad__isnull=True).exclude(ciudad__exact='').values_list('ciudad', flat=True).distinct()
     comunas_disponibles = CustomUser.objects.filter(ciudad=ciudad).values_list('comuna', flat=True).distinct() if ciudad else []
 
     # Crear un queryset base

@@ -37,7 +37,7 @@
     <div class="flex flex-grow min-h-screen">
         {% if user.is_authenticated %}
             <!-- Sidebar -->
-            <aside class="w-64 bg-blue-700 text-white h-screen px-4 py-8 space-y-6 flex flex-col" aria-label="Panel de Administración">
+            <aside class="w-full lg:w-64 bg-blue-700 text-white h-screen px-4 py-8 space-y-6 flex flex-col" aria-label="Panel de Administración">
                 <div class="text-2xl font-semibold italic text-center mb-4">Panel de Administración</div>
                 <nav class="flex flex-col space-y-4">
                     <a href="{% url 'usuarios:perfil' %}" class="flex items-center space-x-2 text-white hover:bg-blue-800 p-2 rounded-lg transition">
@@ -48,10 +48,7 @@
                         <a href="{% url 'citas:lista_citas_paciente' %}" class="flex items-center space-x-2 text-white hover:bg-blue-800 p-2 rounded-lg transition">
                             <i class="fas fa-calendar-check"></i><span>Mis Citas</span>
                         </a>
-                        <a href="{% url 'citas:agendar_cita' %}" class="flex items-center space-x-2 text-white hover:bg-blue-800 p-2 rounded-lg transition">
-                            <i class="fas fa-calendar-plus"></i><span>Agendar Cita</span>
-                        </a>
-                        <!-- Enlace para buscar profesionales solo si es paciente -->
+
                         <a href="{% url 'usuarios:buscar_profesionales' %}" class="flex items-center space-x-2 text-white hover:bg-blue-800 p-2 rounded-lg transition">
                             <i class="fas fa-search"></i><span>Buscar Profesionales</span>
                         </a>
@@ -59,20 +56,23 @@
                         <a href="{% url 'citas:lista_citas_profesional' %}" class="flex items-center space-x-2 text-white hover:bg-blue-800 p-2 rounded-lg transition">
                             <i class="fas fa-calendar-alt"></i><span>Citas Asignadas</span>
                         </a>
+                        <a href="{% url 'citas:citas' %}" class="flex items-center space-x-2 text-white hover:bg-blue-800 p-2 rounded-lg transition">
+                            <i class="fa-solid fa-calendar-check"></i><span>Historial de Citas</span>
+                        </a>
                     {% endif %}
                 </nav>
             </aside>
         {% endif %}
 
         <!-- Contenido Principal -->
-        <main class="flex-grow p-6">
+        <main class="min-h-screen bg-gray-100 flex flex-col py-6 px-4 md:px-8 flex-1">
             {% block content %}
             {% endblock %}
         </main>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-blue-600 text-white text-center py-3">
+    <footer class="bg-blue-600 text-white text-center py-3 mt-auto">
         <p>&copy; 2024 Tu Proyecto de Salud. Todos los derechos reservados.</p>
     </footer>
 

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <!-- Citas Confirmadas -->
+    <h2 class="text-xl font-bold mb-4">Proximas Citas Confirmadas</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg mb-6">
+        <thead class="bg-green-500 text-white text-left">
+            <tr>
+                <th class="py-3 px-6">Paciente</th>
+                <th class="py-3 px-6">Fecha</th>
+                <th class="py-3 px-6">Hora</th>
+                <th class="py-3 px-6">Descripción</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for cita in citas_confirmadas %}
+            <tr class="hover:bg-gray-100 transition-colors">
+                <td class="py-3 px-6">{{ cita.paciente.full_name }}</td>
+                <td class="py-3 px-6">{{ cita.fecha|date:"d M Y" }}</td>
+                <td class="py-3 px-6">{{ cita.hora_inicio }}</td>
+                <td class="py-3 px-6">{{ cita.descripcion }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="py-3 px-6 text-center text-gray-500">No hay citas confirmadas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+
+    <!-- Citas Pasadas: Completadas -->
+    <h2 class="text-xl font-bold mb-4">Citas Completadas</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg mb-6">
+        <thead class="bg-blue-500 text-white text-left">
+            <tr>
+                <th class="py-3 px-6">Paciente</th>
+                <th class="py-3 px-6">Fecha</th>
+                <th class="py-3 px-6">Hora</th>
+                <th class="py-3 px-6">Descripción</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for cita in citas_completadas %}
+            <tr class="hover:bg-gray-100 transition-colors">
+                <td class="py-3 px-6 text-left">{{ cita.paciente.full_name }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.fecha|date:"d M Y" }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.hora_inicio }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.descripcion }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="py-3 px-6 text-center text-gray-500">No hay citas completadas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Citas Pasadas: Canceladas -->
+    <h2 class="text-xl font-bold mb-4">Citas Canceladas</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg mb-6">
+        <thead class="bg-red-500 text-white text-left">
+            <tr>
+                <th class="py-3 px-6">Paciente</th>
+                <th class="py-3 px-6">Fecha</th>
+                <th class="py-3 px-6">Hora</th>
+                <th class="py-3 px-6">Descripción</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for cita in citas_canceladas %}
+            <tr class="hover:bg-gray-100 transition-colors">
+                <td class="py-3 px-6 text-left">{{ cita.paciente.full_name }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.fecha|date:"d M Y" }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.hora_inicio }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.descripcion }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="py-3 px-6 text-center text-gray-500">No hay citas canceladas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="container mx-auto p-4">
+    <!-- Citas Pendientes -->
+    <h2 class="text-xl font-bold mb-4">Citas Pendientes</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg mb-6">
+        <thead class="bg-yellow-500 text-white text-left">
+            <tr>
+                <th class="py-3 px-6">Paciente</th>
+                <th class="py-3 px-6">Fecha</th>
+                <th class="py-3 px-6">Hora</th>
+                <th class="py-3 px-6">Descripción</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for cita in citas_pendientes %}
+            <tr class="hover:bg-gray-100 transition-colors">
+                <td class="py-3 px-6">{{ cita.paciente.full_name }}</td>
+                <td class="py-3 px-6">{{ cita.fecha|date:"d M Y" }}</td>
+                <td class="py-3 px-6">{{ cita.hora_inicio }}</td>
+                <td class="py-3 px-6">{{ cita.descripcion }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="py-3 px-6 text-center text-gray-500">No hay citas pendientes.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Citas Activas -->
+    <h2 class="text-xl font-bold mb-4">Citas Pasadas</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg mb-6">
+        <thead class="bg-green-500 text-white text-left">
+            <tr>
+                <th class="py-3 px-6">Paciente</th>
+                <th class="py-3 px-6">Fecha</th>
+                <th class="py-3 px-6">Hora</th>
+                <th class="py-3 px-6">Descripción</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for cita in citas_pasadas %}
+            <tr class="hover:bg-gray-100 transition-colors">
+                <td class="py-3 px-6 text-left">{{ cita.paciente.full_name }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.fecha|date:"d M Y" }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.hora_inicio }}</td>
+                <td class="py-3 px-6 text-left">{{ cita.descripcion }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="py-3 px-6 text-center text-gray-500">No hay citas activas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    </table>
+</div>
+{% endblock %}
